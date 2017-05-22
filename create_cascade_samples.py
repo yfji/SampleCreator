@@ -8,7 +8,7 @@ labels_dir=os.path.join(path, '../data/labels.txt')
 pos_dir=os.path.join(path, '../train/pos')
 neg_dir=os.path.join(path, '../train/neg')
 positiveSamples=4
-negativeSamples=8
+negativeSamples=16
 width=256
 height=128
 
@@ -142,14 +142,18 @@ def saveSampleImages(sampleFiles, bounding_boxes):
             roi=image[box[1]:box[1]+box[3], box[0]:box[0]+box[2]]
             flipx=cv2.flip(roi,0)
             flipy=cv2.flip(roi,1)
+            equalized=cv2.equalizeHist(roi)
             roi=cv2.resize(roi, (width, height), interpolation=cv2.INTER_CUBIC)
             flipx=cv2.resize(flipx, (width, height), interpolation=cv2.INTER_CUBIC)
             flipy=cv2.resize(flipy, (width, height), interpolation=cv2.INTER_CUBIC)
+            equalized=cv2.resize(equalized, (width, height), interpolation=cv2.INTER_CUBIC)
             cv2.imwrite(os.path.join(pos_dir, '%d.jpg'%pcnt), roi)
             pcnt+=1
             cv2.imwrite(os.path.join(pos_dir, '%d.jpg'%pcnt), flipx)
             pcnt+=1
             cv2.imwrite(os.path.join(pos_dir, '%d.jpg'%pcnt), flipy)
+            pcnt+=1
+            cv2.imwrite(os.path.join(pos_dir, '%d.jpg'%pcnt), equalized)
             pcnt+=1
         for box in pBoxes:
             roi=image[box[1]:box[1]+box[3], box[0]:box[0]+box[2]]
